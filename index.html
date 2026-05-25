@@ -1,314 +1,303 @@
 <!doctype html>
 <html lang="ka">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>The Grimoire - Magic Academy</title>
-        <style>
-            /* 1. ფონტების იმპორტი */
-            @import url("https://fonts.googleapis.com/css2?family=Splash&display=swap");
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Grimoire - Magic Academy</title>
+    <style>
+      /* 1. ფონტების იმპორტი */
+      @import url("https://fonts.googleapis.com/css2?family=Splash&display=swap");
 
-            @font-face {
-                font-family: "GeoFont";
-                src: url("./assets/geo_font.ttf") format("truetype");
-            }
+      @font-face {
+        font-family: "GeoFont";
+        src: url("./assets/geo_font.ttf") format("truetype");
+      }
 
-            * {
-                box-sizing: border-box;
-            }
+      * {
+        box-sizing: border-box;
+      }
 
-            body {
-                margin: 0;
-                display: flex;
-                min-height: 100dvh;
-                perspective: 1000px;
-                font-family: "GeoFont", "Georgia", serif;
-                overflow: hidden;
-                color: #2c1e16;
+      body {
+        margin: 0;
+        display: flex;
+        min-height: 100dvh;
+        perspective: 1000px;
+        font-family: "GeoFont", "Georgia", serif;
+        overflow: hidden;
+        color: #2c1e16;
 
-                background: url("./assets/hogwarts_bg.jpg") center/cover
-                    no-repeat;
-                background-color: #0b0c10;
-            }
+        background: url("./assets/hogwarts_bg.jpg") center/cover no-repeat;
+        background-color: #0b0c10;
+      }
 
-            /* -------------------------
+      /* -------------------------
            ჯადოსნური მტვერი
            ------------------------- */
-            canvas#magic-dust {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                z-index: 1;
-                pointer-events: none;
-            }
+      canvas#magic-dust {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1;
+        pointer-events: none;
+      }
 
-            /* -------------------------
+      /* -------------------------
            FlipBook-ის ლოგიკა 
            ------------------------- */
-            .book {
-                position: relative;
-                display: flex;
-                margin: auto;
-                width: 45cqmin;
-                pointer-events: none;
-                transform-style: preserve-3d;
-                transition: translate 1s;
-                translate: calc(min(var(--c), 1) * 50%) 0%;
-                rotate: 1 0 0 30deg;
-                counter-reset: page -1;
-                z-index: 10;
-            }
+      .book {
+        position: relative;
+        display: flex;
+        margin: auto;
+        width: 45cqmin;
+        pointer-events: none;
+        transform-style: preserve-3d;
+        transition: translate 1s;
+        translate: calc(min(var(--c), 1) * 50%) 0%;
+        rotate: 1 0 0 30deg;
+        counter-reset: page -1;
+        z-index: 10;
+      }
 
-            .book a {
-                color: inherit;
-            }
+      .book a {
+        color: inherit;
+      }
 
-            .page {
-                --thickness: 4;
-                flex: none;
-                display: flex;
-                width: 100%;
-                font-size: 1.8cqmin;
-                pointer-events: all;
-                user-select: none;
-                transform-style: preserve-3d;
-                transform-origin: left center;
-                transition:
-                    transform 1s,
-                    rotate 1s ease-in
-                        calc(
-                            (
-                                    min(var(--i), var(--c)) -
-                                        max(var(--i), var(--c))
-                                ) *
-                                50ms
-                        );
-                translate: calc(var(--i) * -100%) 0px 0px;
-                transform: translateZ(
-                    calc(
-                        (var(--c) - var(--i) - 0.5) *
-                            calc(var(--thickness) * 0.23cqmin)
-                    )
-                );
-                rotate: 0 1 0 calc(clamp(0, var(--c) - var(--i), 1) * -180deg);
-                box-shadow: 0em 1em 2em -0.2em rgba(0, 0, 0, 0.7);
-            }
+      .page {
+        --thickness: 4;
+        flex: none;
+        display: flex;
+        width: 100%;
+        font-size: 1.8cqmin;
+        pointer-events: all;
+        user-select: none;
+        transform-style: preserve-3d;
+        transform-origin: left center;
+        transition:
+          transform 1s,
+          rotate 1s ease-in
+            calc((min(var(--i), var(--c)) - max(var(--i), var(--c))) * 50ms);
+        translate: calc(var(--i) * -100%) 0px 0px;
+        transform: translateZ(
+          calc((var(--c) - var(--i) - 0.5) * calc(var(--thickness) * 0.23cqmin))
+        );
+        rotate: 0 1 0 calc(clamp(0, var(--c) - var(--i), 1) * -180deg);
+        box-shadow: 0em 1em 2em -0.2em rgba(0, 0, 0, 0.7);
+      }
 
-            .front,
-            .back {
-                position: relative;
-                flex: none;
-                width: 100%;
-                backface-visibility: hidden;
-                overflow: hidden;
-                display: flex;
-                flex-flow: column wrap;
-                justify-content: flex-start;
-                padding: 2em;
-                border: 1px solid rgba(62, 39, 35, 0.3);
-                translate: 0px;
-            }
+      .front,
+      .back {
+        position: relative;
+        flex: none;
+        width: 100%;
+        backface-visibility: hidden;
+        overflow: hidden;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: flex-start;
+        padding: 2em;
+        border: 1px solid rgba(62, 39, 35, 0.3);
+        translate: 0px;
+      }
 
-            .back {
-                translate: -100% 0;
-                rotate: 0 1 0 180deg;
-            }
+      .back {
+        translate: -100% 0;
+        rotate: 0 1 0 180deg;
+      }
 
-            .front:has(img),
-            .back:has(img) {
-                padding: 0;
-            }
-            .front img,
-            .back img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
+      .front:has(img),
+      .back:has(img) {
+        padding: 0;
+      }
+      .front img,
+      .back img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-            .front::after,
-            .back::after {
-                position: absolute;
-                bottom: 1em;
-                counter-increment: page;
-                content: counter(page) ".";
-                font-size: 0.8em;
-                color: #555;
-                font-family: "Courier New", Courier, monospace;
-            }
-            .front::after {
-                right: 1em;
-            }
-            .back::after {
-                left: 1em;
-            }
-            .cover::after {
-                content: "";
-            }
+      .front::after,
+      .back::after {
+        position: absolute;
+        bottom: 1em;
+        counter-increment: page;
+        content: counter(page) ".";
+        font-size: 0.8em;
+        color: #555;
+        font-family: "Courier New", Courier, monospace;
+      }
+      .front::after {
+        right: 1em;
+      }
+      .back::after {
+        left: 1em;
+      }
+      .cover::after {
+        content: "";
+      }
 
-            /* -------------------------
+      /* -------------------------
            ჯადოსნური ვიზუალი & დაძველება
            ------------------------- */
-            .front {
-                background-color: #e8d8b7;
-                background-image:
-                    linear-gradient(
-                        to right,
-                        rgba(0, 0, 0, 0.1) 0%,
-                        transparent 10%,
-                        transparent 90%,
-                        rgba(0, 0, 0, 0.05) 100%
-                    ),
-                    radial-gradient(
-                        circle at center,
-                        transparent 60%,
-                        rgba(101, 67, 33, 0.2) 100%
-                    );
-                border-radius: 0.1em 0.5em 0.5em 0.1em;
-                box-shadow:
-                    inset -10px 0 20px rgba(62, 39, 35, 0.15),
-                    inset 0 0 50px rgba(101, 67, 33, 0.2);
-            }
+      .front {
+        background-color: #e8d8b7;
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.1) 0%,
+            transparent 10%,
+            transparent 90%,
+            rgba(0, 0, 0, 0.05) 100%
+          ),
+          radial-gradient(
+            circle at center,
+            transparent 60%,
+            rgba(101, 67, 33, 0.2) 100%
+          );
+        border-radius: 0.1em 0.5em 0.5em 0.1em;
+        box-shadow:
+          inset -10px 0 20px rgba(62, 39, 35, 0.15),
+          inset 0 0 50px rgba(101, 67, 33, 0.2);
+      }
 
-            .back {
-                background-color: #e8d8b7;
-                background-image:
-                    linear-gradient(
-                        to left,
-                        rgba(0, 0, 0, 0.1) 0%,
-                        transparent 10%,
-                        transparent 90%,
-                        rgba(0, 0, 0, 0.05) 100%
-                    ),
-                    radial-gradient(
-                        circle at center,
-                        transparent 60%,
-                        rgba(101, 67, 33, 0.2) 100%
-                    );
-                border-radius: 0.5em 0.1em 0.1em 0.5em;
-                box-shadow:
-                    inset 10px 0 20px rgba(62, 39, 35, 0.15),
-                    inset 0 0 50px rgba(101, 67, 33, 0.2);
-            }
+      .back {
+        background-color: #e8d8b7;
+        background-image:
+          linear-gradient(
+            to left,
+            rgba(0, 0, 0, 0.1) 0%,
+            transparent 10%,
+            transparent 90%,
+            rgba(0, 0, 0, 0.05) 100%
+          ),
+          radial-gradient(
+            circle at center,
+            transparent 60%,
+            rgba(101, 67, 33, 0.2) 100%
+          );
+        border-radius: 0.5em 0.1em 0.1em 0.5em;
+        box-shadow:
+          inset 10px 0 20px rgba(62, 39, 35, 0.15),
+          inset 0 0 50px rgba(101, 67, 33, 0.2);
+      }
 
-            .cover {
-                background:
-                    radial-gradient(
-                        circle at center,
-                        transparent 0%,
-                        rgba(0, 0, 0, 0.6) 100%
-                    ),
-                    linear-gradient(45deg, #2a1b12 0%, #100803 100%);
-                color: #d4af37;
-                border: 4px double #5a3b22;
-                box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-            }
+      .cover {
+        background:
+          radial-gradient(
+            circle at center,
+            transparent 0%,
+            rgba(0, 0, 0, 0.6) 100%
+          ),
+          linear-gradient(45deg, #2a1b12 0%, #100803 100%);
+        color: #d4af37;
+        border: 4px double #5a3b22;
+        box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.9);
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
 
-            .cover h1 {
-                font-family: "Splash", cursive;
-                font-weight: 400;
-                font-style: normal;
-                font-size: 5.5em;
-                margin: 0;
-                text-shadow:
-                    2px 2px 5px rgba(0, 0, 0, 0.8),
-                    0 0 15px rgba(212, 175, 55, 0.4);
-                line-height: 1;
-                padding-bottom: 20px;
-            }
+      .cover h1 {
+        font-family: "Splash", cursive;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 5.5em;
+        margin: 0;
+        text-shadow:
+          2px 2px 5px rgba(0, 0, 0, 0.8),
+          0 0 15px rgba(212, 175, 55, 0.4);
+        line-height: 1;
+        padding-bottom: 20px;
+      }
 
-            h2 {
-                color: #4e342e;
-                border-bottom: 2px solid rgba(78, 52, 46, 0.3);
-                padding-bottom: 5px;
-                font-size: 1.5em;
-                margin-top: 0;
-                text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
-            }
-            h3 {
-                color: #8b0000;
-                margin-bottom: 5px;
-            }
-            p {
-                font-size: 1.1em;
-                line-height: 1.6;
-                margin-top: 0;
-                color: #3e2723;
-            }
+      h2 {
+        color: #4e342e;
+        border-bottom: 2px solid rgba(78, 52, 46, 0.3);
+        padding-bottom: 5px;
+        font-size: 1.5em;
+        margin-top: 0;
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+      }
+      h3 {
+        color: #8b0000;
+        margin-bottom: 5px;
+      }
+      p {
+        font-size: 1.1em;
+        line-height: 1.6;
+        margin-top: 0;
+        color: #3e2723;
+      }
 
-            /* განახლებული Code Block სტილი */
-            .code-block {
-                background: rgba(255, 255, 255, 0.3);
-                border-left: 4px solid #5a3b22;
-                padding: 12px;
-                font-family: "Courier New", Courier, monospace;
-                font-size: 0.85em;
-                color: #1a110b;
-                white-space: pre-wrap;
-                margin: 10px 0;
-                font-weight: bold;
-                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
-                tab-size: 2; /* ტაბების ზომის კონტროლი */
-                overflow-wrap: break-word; /* გრძელი ხაზების ჩამოტანა */
-                word-wrap: break-word;
-            }
+      /* განახლებული Code Block სტილი */
+      .code-block {
+        background: rgba(255, 255, 255, 0.3);
+        border-left: 4px solid #5a3b22;
+        padding: 12px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 0.85em;
+        color: #1a110b;
+        white-space: pre-wrap;
+        margin: 10px 0;
+        font-weight: bold;
+        box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        tab-size: 2; /* ტაბების ზომის კონტროლი */
+        overflow-wrap: break-word; /* გრძელი ხაზების ჩამოტანა */
+        word-wrap: break-word;
+      }
 
-            .highlight {
-                color: #8b0000;
-                font-weight: bold;
-            }
-            .note {
-                font-style: italic;
-                color: #5d4037;
-                font-size: 0.95em;
-            }
-        </style>
-    </head>
-    <body>
-        <audio id="bg-music" loop>
-            <source src="./assets/soundtrack.mp3" type="audio/mpeg" />
-        </audio>
+      .highlight {
+        color: #8b0000;
+        font-weight: bold;
+      }
+      .note {
+        font-style: italic;
+        color: #5d4037;
+        font-size: 0.95em;
+      }
+    </style>
+  </head>
+  <body>
+    <audio id="bg-music" loop>
+      <source src="./assets/soundtrack.mp3" type="audio/mpeg" />
+    </audio>
 
-        <canvas id="magic-dust"></canvas>
+    <canvas id="magic-dust"></canvas>
 
-        <div class="book" id="grimoire">
-            <div class="page">
-                <div class="front cover">
-                    <h1>The Grimoire</h1>
-                    <p
-                        style="
-                            font-family: &quot;GeoFont&quot;, Georgia, serif;
-                            letter-spacing: 2px;
-                        "
-                    >
-                        Volume III<br />Functions & Spells
-                    </p>
-                </div>
-                <div class="back">
-                    <h2>მაგიურ აკადემიაში</h2>
-                    <p>
-                        აქამდე თქვენ უბრალოდ აგროვებდით მონაცემებს — აწყობდით
-                        ინვენტარს. მაგრამ ინვენტარს აზრი არ აქვს, თუ მისი
-                        გამოყენება არ იცით.
-                    </p>
-                    <p class="note">
-                        „თუ ცვლადები არის ნივთები ჯადოსნურ ჩანთაში, ფუნქციები
-                        არის შელოცვები. ერთხელ ისწავლით შელოცვას და შემდეგ
-                        იყენებთ იმდენჯერ, რამდენჯერაც დაგჭირდებათ.“
-                    </p>
-                    <p>გადაფურცლე, რომ შეისწავლო პირველი შელოცვა.</p>
-                </div>
-            </div>
+    <div class="book" id="grimoire">
+      <div class="page">
+        <div class="front cover">
+          <h1>The Grimoire</h1>
+          <p
+            style="
+              font-family: &quot;GeoFont&quot;, Georgia, serif;
+              letter-spacing: 2px;
+            "
+          >
+            Volume III<br />Functions & Spells
+          </p>
+        </div>
+        <div class="back">
+          <h2>მაგიურ აკადემიაში</h2>
+          <p>
+            აქამდე თქვენ უბრალოდ აგროვებდით მონაცემებს — აწყობდით ინვენტარს.
+            მაგრამ ინვენტარს აზრი არ აქვს, თუ მისი გამოყენება არ იცით.
+          </p>
+          <p class="note">
+            „თუ ცვლადები არის ნივთები ჯადოსნურ ჩანთაში, ფუნქციები არის
+            შელოცვები. ერთხელ ისწავლით შელოცვას და შემდეგ იყენებთ იმდენჯერ,
+            რამდენჯერაც დაგჭირდებათ.“
+          </p>
+          <p>გადაფურცლე, რომ შეისწავლო პირველი შელოცვა.</p>
+        </div>
+      </div>
 
-            <div class="page">
-                <div class="front">
-                    <h2>1. პირველი შელოცვა</h2>
-                    <p>შელოცვის გამოცხადება (Declaration) და გამოყენება.</p>
-                    <pre class="code-block">
+      <div class="page">
+        <div class="front">
+          <h2>1. პირველი შელოცვა</h2>
+          <p>შელოცვის გამოცხადება (Declaration) და გამოყენება.</p>
+          <pre class="code-block">
 // შელოცვის შექმნა
 function castSpell(spellName) {
   let result = "Casted: " + spellName;
@@ -318,21 +307,17 @@ function castSpell(spellName) {
 // შელოცვის გამოყენება
 let attack = castSpell("Expelliarmus");
 console.log(attack);</pre
-                    >
-                    <p class="note">
-                        <span class="highlight">Console.log</span> ილუზიაა,
-                        ნაპერწკალი ეკრანზე.
-                        <span class="highlight">Return</span> არის ნამდვილი
-                        მაგია, რომელიც აბრუნებს რეალურ ძალას!
-                    </p>
-                </div>
-                <div class="back">
-                    <h2>2. აურა (Scope)</h2>
-                    <p>
-                        ლოკალური მაგია მხოლოდ ოთახში მუშაობს, გლობალური კი
-                        ყველგან.
-                    </p>
-                    <pre class="code-block">
+          >
+          <p class="note">
+            <span class="highlight">Console.log</span> ილუზიაა, ნაპერწკალი
+            ეკრანზე. <span class="highlight">Return</span> არის ნამდვილი მაგია,
+            რომელიც აბრუნებს რეალურ ძალას!
+          </p>
+        </div>
+        <div class="back">
+          <h2>2. აურა (Scope)</h2>
+          <p>ლოკალური მაგია მხოლოდ ოთახში მუშაობს, გლობალური კი ყველგან.</p>
+          <pre class="code-block">
 let hogwartsMana = 1000; 
 
 function healingRoom() {
@@ -344,36 +329,33 @@ function healingRoom() {
 healingRoom();
 console.log(hogwartsMana); // ისევ 1000
 // console.log(roomMana); -> ERROR!</pre
-                    >
-                </div>
-            </div>
+          >
+        </div>
+      </div>
 
-            <div class="page">
-                <div class="front">
-                    <h2>3. ჯოხის ქნევის ტექნიკა</h2>
-                    <h3>Direct Execution (პირდაპირი)</h3>
-                    <p>
-                        <code>castSpell()</code> — ფრჩხილები ნიშნავს: "ახლავე
-                        ისროლე!"
-                    </p>
+      <div class="page">
+        <div class="front">
+          <h2>3. ჯოხის ქნევის ტექნიკა</h2>
+          <h3>Direct Execution (პირდაპირი)</h3>
+          <p><code>castSpell()</code> — ფრჩხილები ნიშნავს: "ახლავე ისროლე!"</p>
 
-                    <h3>Indirect Execution (ირიბი)</h3>
-                    <p>
-                        <code>castSpell</code> — ფრჩხილების გარეშე ნიშნავს:
-                        "ჯოხი მოვიმარჯვე და ველოდები ბრძანებას".
-                    </p>
-                    <p class="note">
-                        ამას მომავალში Event Listeners-ზე გამოვიყენებთ (მაგ:
-                        ღილაკზე დაჭერისას).
-                    </p>
-                </div>
-                <div class="back">
-                    <h2>4. უსიტყვო მაგია (ES6)</h2>
-                    <p>
-                        უფროსკურსელები აღარ ყვირიან შელოცვებს. მათ გააქრეს
-                        სიტყვა `function`, ფრჩხილები და `return`.
-                    </p>
-                    <pre class="code-block">
+          <h3>Indirect Execution (ირიბი)</h3>
+          <p>
+            <code>castSpell</code> — ფრჩხილების გარეშე ნიშნავს: "ჯოხი მოვიმარჯვე
+            და ველოდები ბრძანებას".
+          </p>
+          <p class="note">
+            ამას მომავალში Event Listeners-ზე გამოვიყენებთ (მაგ: ღილაკზე
+            დაჭერისას).
+          </p>
+        </div>
+        <div class="back">
+          <h2>4. უსიტყვო მაგია (ES6)</h2>
+          <p>
+            უფროსკურსელები აღარ ყვირიან შელოცვებს. მათ გააქრეს სიტყვა
+            `function`, ფრჩხილები და `return`.
+          </p>
+          <pre class="code-block">
 // ტრადიციული
 function lumos() {
   return "Wand is glowing!";
@@ -385,153 +367,144 @@ const patronus = (animal) => {
 };
 
 console.log(patronus("Stag"));</pre
-                    >
-                </div>
-            </div>
-
-            <div class="page">
-                <div class="front">
-                    <h2>⚔️ დუელის კლუბი (მისია)</h2>
-                    <p>გახსენით Console (F12) და დაწერეთ:</p>
-                    <ol
-                        style="
-                            padding-left: 15px;
-                            margin-top: 5px;
-                            font-size: 0.9em;
-                            font-family: &quot;GeoFont&quot;, Georgia, serif;
-                        "
-                    >
-                        <li>
-                            ფუნქცია <code>calculateDamage(base, crit)</code>,
-                            რომელიც დააბრუნებს ნამრავლს.
-                        </li>
-                        <li>
-                            Arrow Function: <code>healPotion(hp)</code>, რომელიც
-                            hp-ს დაუმატებს 50-ს.
-                        </li>
-                        <li><code>let myHealth = 100;</code></li>
-                        <li>
-                            გამოიძახეთ დარტყმა:
-                            <code
-                                >myHealth = myHealth - calculateDamage(20,
-                                2);</code
-                            >
-                        </li>
-                        <li>
-                            აღიდგინეთ სიცოცხლე:
-                            <code>myHealth = healPotion(myHealth);</code>
-                        </li>
-                    </ol>
-                    <p class="highlight" style="text-align: center">
-                        გადაუღეთ სქრინშოთი კონსოლს!
-                    </p>
-                </div>
-                <div class="back cover">
-                    <h3 style="color: #d4af37; border: none">
-                        End of Volume III
-                    </h3>
-                    <p
-                        style="
-                            margin-top: 50px;
-                            font-size: 0.8em;
-                            color: #a98f5b;
-                            font-family: &quot;GeoFont&quot;, Georgia, serif;
-                        "
-                    >
-                        Magic Academy Curriculum<br />JavaScript Fundamentals
-                    </p>
-                </div>
-            </div>
+          >
         </div>
+      </div>
 
-        <script>
-            // --- მუსიკის ლოგიკა ---
-            document.body.addEventListener(
-                "click",
-                () => {
-                    const bgMusic = document.getElementById("bg-music");
-                    if (bgMusic.paused) {
-                        bgMusic.volume = 0.8;
-                        bgMusic
-                            .play()
-                            .catch((e) =>
-                                console.log("Audio play prevented:", e),
-                            );
-                    }
-                },
-                { once: true },
-            );
+      <div class="page">
+        <div class="front">
+          <h2>⚔️ დუელის კლუბი (მისია)</h2>
+          <p>გახსენით Console (F12) და დაწერეთ:</p>
+          <ol
+            style="
+              padding-left: 15px;
+              margin-top: 5px;
+              font-size: 0.9em;
+              font-family: &quot;GeoFont&quot;, Georgia, serif;
+            "
+          >
+            <li>
+              ფუნქცია <code>calculateDamage(base, crit)</code>, რომელიც
+              დააბრუნებს ნამრავლს.
+            </li>
+            <li>
+              Arrow Function: <code>healPotion(hp)</code>, რომელიც hp-ს
+              დაუმატებს 50-ს.
+            </li>
+            <li><code>let myHealth = 100;</code></li>
+            <li>
+              გამოიძახეთ დარტყმა:
+              <code>myHealth = myHealth - calculateDamage(20, 2);</code>
+            </li>
+            <li>
+              აღიდგინეთ სიცოცხლე:
+              <code>myHealth = healPotion(myHealth);</code>
+            </li>
+          </ol>
+          <p class="highlight" style="text-align: center">
+            გადაუღეთ სქრინშოთი კონსოლს!
+          </p>
+        </div>
+        <div class="back cover">
+          <h3 style="color: #d4af37; border: none">End of Volume III</h3>
+          <p
+            style="
+              margin-top: 50px;
+              font-size: 0.8em;
+              color: #a98f5b;
+              font-family: &quot;GeoFont&quot;, Georgia, serif;
+            "
+          >
+            Magic Academy Curriculum<br />JavaScript Fundamentals
+          </p>
+        </div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+      // --- მუსიკის ლოგიკა ---
+      document.body.addEventListener(
+        "click",
+        () => {
+          const bgMusic = document.getElementById("bg-music");
+          if (bgMusic.paused) {
+            bgMusic.volume = 0.8;
+            bgMusic
+              .play()
+              .catch((e) => console.log("Audio play prevented:", e));
+          }
+        },
+        { once: true },
+      );
 
-            // --- FlipBook ლოგიკა ---
-            const flipBook = (elBook) => {
-                elBook.style.setProperty("--c", 0);
-                elBook.querySelectorAll(".page").forEach((page, idx) => {
-                    page.style.setProperty("--i", idx);
-                    page.addEventListener("click", (evt) => {
-                        if (evt.target.closest("a")) return;
-                        const curr = evt.target.closest(".back")
-                            ? idx
-                            : idx + 1;
-                        elBook.style.setProperty("--c", curr);
-                    });
-                });
-            };
-            document.querySelectorAll(".book").forEach(flipBook);
+      // --- FlipBook ლოგიკა ---
+      const flipBook = (elBook) => {
+        elBook.style.setProperty("--c", 0);
+        elBook.querySelectorAll(".page").forEach((page, idx) => {
+          page.style.setProperty("--i", idx);
+          page.addEventListener("click", (evt) => {
+            if (evt.target.closest("a")) return;
+            const curr = evt.target.closest(".back") ? idx : idx + 1;
+            elBook.style.setProperty("--c", curr);
+          });
+        });
+      };
+      document.querySelectorAll(".book").forEach(flipBook);
 
-            // --- ჯადოსნური ოქროსფერი მტვრის ანიმაცია ---
-            function startMagicDust() {
-                const canvas = document.getElementById("magic-dust");
-                const ctx = canvas.getContext("2d");
-                const dustColor = "#d4af37";
+      // --- ჯადოსნური ოქროსფერი მტვრის ანიმაცია ---
+      function startMagicDust() {
+        const canvas = document.getElementById("magic-dust");
+        const ctx = canvas.getContext("2d");
+        const dustColor = "#d4af37";
 
-                const setSize = () => {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                };
-                setSize();
-                window.addEventListener("resize", setSize);
+        const setSize = () => {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        };
+        setSize();
+        window.addEventListener("resize", setSize);
 
-                const particles = [];
-                for (let i = 0; i < 480; i++) {
-                    particles.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        radius: Math.random() * 2 + 0.5,
-                        vx: (Math.random() - 0.5) * 0.5,
-                        vy: (Math.random() - 0.5) * 0.5,
-                        life: Math.random() * 100,
-                    });
-                }
+        const particles = [];
+        for (let i = 0; i < 480; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 2 + 0.5,
+            vx: (Math.random() - 0.5) * 0.5,
+            vy: (Math.random() - 0.5) * 0.5,
+            life: Math.random() * 100,
+          });
+        }
 
-                function animate() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function animate() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                    particles.forEach((p) => {
-                        p.x += p.vx;
-                        p.y -= Math.abs(p.vy);
+          particles.forEach((p) => {
+            p.x += p.vx;
+            p.y -= Math.abs(p.vy);
 
-                        if (p.y < 0) p.y = canvas.height;
-                        if (p.x < 0) p.x = canvas.width;
-                        if (p.x > canvas.width) p.x = 0;
+            if (p.y < 0) p.y = canvas.height;
+            if (p.x < 0) p.x = canvas.width;
+            if (p.x > canvas.width) p.x = 0;
 
-                        p.life += 0.03;
-                        const alpha = Math.abs(Math.sin(p.life)) * 0.8;
+            p.life += 0.03;
+            const alpha = Math.abs(Math.sin(p.life)) * 0.8;
 
-                        ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                        ctx.fillStyle = `rgba(212, 175, 55, ${alpha})`;
-                        ctx.fill();
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(212, 175, 55, ${alpha})`;
+            ctx.fill();
 
-                        ctx.shadowBlur = 15;
-                        ctx.shadowColor = dustColor;
-                    });
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = dustColor;
+          });
 
-                    requestAnimationFrame(animate);
-                }
-                animate();
-            }
+          requestAnimationFrame(animate);
+        }
+        animate();
+      }
 
-            startMagicDust();
-        </script>
-    </body>
+      startMagicDust();
+    </script>
+  </body>
 </html>
